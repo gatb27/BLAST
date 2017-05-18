@@ -12,12 +12,12 @@ import thread
 import requests
 import json
 
-EPOCH_TIME=10
+EPOCH_TIME=30
 
 gen_tx = "fc64c5ad44c7fd43891392699a5dfd9d499207ee6f073a85e67093897ed79456"
 
-rpc_user = "daniele"
-rpc_pwd = "asdasdasd"
+rpc_user = "gatto"
+rpc_pwd = "gatto"
 rpc = ServiceProxy("http://%s:%s@127.0.0.1:18332/" % (rpc_user, rpc_pwd))
 
 pos_proof = 0
@@ -205,6 +205,3 @@ while 1:
 #EPOCH_tx(hash("CIAO GATTO"))
 
 #EPOCH()
-
-
-

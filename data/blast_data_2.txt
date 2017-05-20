@@ -1,0 +1,4 @@
+epoch: 2
+#elements: 876
+root: ebbb25ec8ac32bb8985f707b6a841599b1a03613bdfe29fcaaefbc6d5f01a4df
+tx_id: 351774fbb880ae46342db14b524c561ae3025254399a46cb2d03b40e2ec840ac

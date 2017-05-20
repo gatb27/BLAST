@@ -12,7 +12,7 @@ import thread
 import requests
 import json
 
-EPOCH_TIME=30
+EPOCH_TIME=1
 
 gen_tx = "fc64c5ad44c7fd43891392699a5dfd9d499207ee6f073a85e67093897ed79456"
 
@@ -25,20 +25,27 @@ pos_proof = 0
 
 #INPUT DEVE ESSERE hash
 def EPOCH_tx(smh):
+
+	with open("current_tx.txt", "r") as file:
+		current_tx=file.readline()
+
 	if current_tx=="":
 		my_tx = gen_tx
 	else:
 		my_tx = current_tx
 	print my_tx
 
+
 	unspent_txs = rpc.listunspent()
-	print rpc.listunspent()
+	#print rpc.listunspent()
 	for utx in unspent_txs:
 		if(utx['txid'] in my_tx):
 			print utx
 			sel_tx = utx
 			in_txid = utx['txid']
 			in_vout = utx['vout']
+
+	#sel_tx = rpc.gettransaction(my_tx)
 
 	print "Selected transaction: ", sel_tx
 
@@ -85,6 +92,10 @@ def EPOCH_tx(smh):
 	print "The transaction has been accepted with id: ", txid, "\n"
 	with open("current_tx.txt", "w") as file:
 		file.write(txid)
+
+	# Only for regression
+	rpc.generate(101)
+
 	return txid
 
 
@@ -109,12 +120,13 @@ def EPOCH():
 	signature = sign(t,prev_smh, root_t)
 	print 'H(SIGNATURE): ' + signature
 	tx_id = EPOCH_tx(hash(signature))
+	#current_tx = tx_id
 	with open("server_data.txt", "w") as file:
 		file.write(signature+"\n")
 		file.write(t+"\n")
 		file.write(root_t+"\n")
 
-	with open("blast_data_"+t+".txt", "w") as file:
+	with open("data/blast_data_"+t+".txt", "w") as file:
 		file.write("epoch: "+ t+"\n")
 		file.write("#elements: " + str(mt.get_leaf_count()) + "\n")
 		file.write("root: " + root_t + "\n")
@@ -164,12 +176,12 @@ def thread_client():
 		rnd_vals=get_random_values(random.randint(0,10), random.randint(5,15))
 		for x in rnd_vals:
 			mt.add_leaf(x, True)
-		time.sleep(30)
+		time.sleep(2)
 
 
 def thread_epoch_gen():
 	while 1:
-		time.sleep(EPOCH_TIME*60)
+		time.sleep(EPOCH_TIME*10)
 		EPOCH()
 
 # ---------------------MAIN-------------------
